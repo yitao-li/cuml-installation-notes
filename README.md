@@ -28,12 +28,20 @@ see
 - And then run the following:
 
 ```
-wget https://github.com/rapidsai/cuml/archive/refs/tags/v21.06.02.tar.gz
-tar xvf v21.06.02.tar.gz
-cd cuml-21.06.02/cpp
+git clone https://github.com/rapidsai/cuml.git
+cd cuml
+# git checkout branch-21.08
 mkdir build
 cd build
-cmake .. -DENABLE_CUMLPRIMS_MG=OFF -DBUILD_CUML_TESTS=OFF -DBUILD_CUML_BENCH=OFF
+cmake \
+  -DSINGLEGPU=ON \
+  -DBUILD_CUML_TESTS=OFF \
+  -DBUILD_PRIMS_TESTS=OFF \
+  -DBUILD_CUML_EXAMPLES=OFF \
+  -DBUILD_CUML_BENCH=OFF \
+  -DBUILD_CUML_PRIMS_BENCH=OFF \
+  -DCMAKE_INSTALL_PREFIX=/usr \
+  ..
 make -j $(nproc)
 ```
 
