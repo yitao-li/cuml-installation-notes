@@ -1,6 +1,6 @@
 # cuml-installation-notes
 
-This page summarizes 2 possible ways to install the GPU-accelerated ML libraries
+This page summarizes 3 possible ways to install the GPU-accelerated ML libraries
 offered by [cuML](https://github.com/rapidsai/cuml).
 
 ## Conda / Docker
@@ -54,3 +54,45 @@ of the `cuml` repo, this, unlike Conda/Docker, is **not** an officially
 supported release channel of `cuml` (yet) AFAIK. So, your mileage may vary.
 Also, the build could take a non-negligible amount of time, even on an 8-core
 machine with modern CPUs.
+
+## Build from source without `Conda` and with multi-GPU support
+
+Now this is even further away from the beaten paths and appears somewhat
+brittle, but at least it has worked for the `branch-21.08` branch of the `cuML`
+repo.
+
+To build `cuML` successfully with multi-GPU support, one will need a library
+named `libcumlprims` ("prims" meaning primitives). Because the author of this
+note was unable to find any source code for `libcumlprims` on the internet, the
+only viable alternative so far seems to be downloading and installing a pre-
+built copy of `libcumlprims` instead of building it from source. So,
+
+```
+# NOTE: you should choose the most recent version of libcumlprims that matches
+# the version of CUDA you intend to use. Looks like currently only x86-64 is
+# supported.
+#
+# Also, the `| sudo tar -xjvf - -C /usr` part is probably not something you
+# should run directly in production!!
+wget -O - https://anaconda.org/nvidia/libcumlprims/21.06.00/download/linux-64/libcumlprims-21.06.00-cuda11.2_gfda2e6c_0.tar.bz2 | sudo tar -xjvf - -C /usr
+```
+
+and then, similar build instructions as above except for removal of the
+`-DSINGLEGPU=ON` flag:
+
+```
+git clone https://github.com/rapidsai/cuml.git
+cd cuml
+# git checkout branch-21.08
+mkdir build
+cd build
+cmake \
+  -DBUILD_CUML_TESTS=OFF \
+  -DBUILD_PRIMS_TESTS=OFF \
+  -DBUILD_CUML_EXAMPLES=OFF \
+  -DBUILD_CUML_BENCH=OFF \
+  -DBUILD_CUML_PRIMS_BENCH=OFF \
+  -DCMAKE_INSTALL_PREFIX=/usr \
+  ..
+make -j $(nproc)
+```
