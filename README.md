@@ -5,6 +5,8 @@ offered by [cuML](https://github.com/rapidsai/cuml).
 
 ## Conda / Docker
 
+See [https://rapids.ai/start.html#get-rapids](https://rapids.ai/start.html#get-rapids).
+
 Conda and Docker are at the moment the two officially supported release channels
 for `cuML`. When installing `cuML` via Docker, RAPIDS components will be
 installed from published Conda packages to the 'rapids' Conda environment (e.g.,
@@ -47,6 +49,8 @@ make -j $(nproc)
 
 to build `cuML` libraries from source.
 
-NOTE: this is **not** an officially supported release channel (yet). Your
-mileage may vary. Also, the build could take quite a while, even on an
-8-core machine with modern CPUs.
+NOTE: even though in principle this *should* work, at least on a release branch
+of the `cuml` repo, this, unlike Conda/Docker, is **not** an officially
+supported release channel of `cuml` (yet) AFAIK. So, your mileage may vary.
+Also, the build could take a non-negligible amount of time, even on an 8-core
+machine with modern CPUs.
