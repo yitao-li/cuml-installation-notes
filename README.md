@@ -33,6 +33,7 @@ see
 git clone https://github.com/rapidsai/cuml.git
 cd cuml
 # git checkout branch-21.08
+cd cpp
 mkdir build
 cd build
 cmake \
