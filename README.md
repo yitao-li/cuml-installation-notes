@@ -56,6 +56,20 @@ supported release channel of `cuml` (yet) AFAIK. So, your mileage may vary.
 Also, the build could take a non-negligible amount of time, even on an 8-core
 machine with modern CPUs.
 
+### **EDIT**
+It looks like for `cuML` 21.10 or above, the `spdlog` header files
+(which are required by `rmm` and possibly other `cuML` dependencies) will not be
+installed by default when you run `make install`. As a temp workaround for this,
+you can do the following:
+- Go to https://github.com/rapidsai/rapids-cmake, switch to
+`branch-<the cuML version you want to install>`.
+- See the required `spdlog` version in the `rapids-cmake/cpm/versions.json`
+config file (e.g., something like this:
+https://github.com/rapidsai/rapids-cmake/blob/e7a79a669f3ccec524f99c50f518c0879c33f19a/rapids-cmake/cpm/versions.json#L21).
+- Build and install that required version
+of `spdlog` from source using the commit tagged `v<required spdlog version>` from
+the https://github.com/gabime/spdlog.git repo.
+
 ## Build from source without `Conda` and with multi-GPU support
 
 Now this is even further away from the beaten paths and appears somewhat
@@ -97,3 +111,6 @@ cmake \
   ..
 make -j $(nproc)
 ```
+
+Also, see [comment](#edit) above re: how to intall `spdlog` header files that
+are possibly missing.
